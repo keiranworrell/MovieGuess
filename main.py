@@ -15,31 +15,33 @@ class MovieGuess(GridLayout):
 class MovieGuessApp(App):
     def build(self):
         self.movieGuess = MovieGuess()
-        # r = requests.get("https://ut7qnywcuo6ffotdpo56lu4fvi0ujuoh.lambda-url.eu-west-2.on.aws/")
-        # data = json.loads(r.text)
-        # self.filmName = data['Item']['filmName']['S']
-        # self.actor1 = data['Item']['actor1']['S']
-        # self.actor2 = data['Item']['actor2']['S']
-        # self.actor3 = data['Item']['actor3']['S']
-        # self.actor4 = data['Item']['actor4']['S']
-        # self.actor5 = data['Item']['actor5']['S']
+        r = requests.get("https://ut7qnywcuo6ffotdpo56lu4fvi0ujuoh.lambda-url.eu-west-2.on.aws/")
+        data = json.loads(r.text)
+        self.filmName = data['Item']['filmName']['S']
+        self.actor1 = data['Item']['actor1']['S']
+        self.actor2 = data['Item']['actor2']['S']
+        self.actor3 = data['Item']['actor3']['S']
+        self.actor4 = data['Item']['actor4']['S']
+        self.actor5 = data['Item']['actor5']['S']
 
-        self.filmName = "Knives Out"
-        self.actor1 = "LaKeith Stanfield"
-        self.actor2 = "Jamie Lee Kurtis"
-        self.actor3 = "Ana De Armas"
-        self.actor4 = "Chris Evans"
-        self.actor5 = "Daniel Craig"
+        # self.filmName = "Knives Out"
+        # self.actor1 = "LaKeith Stanfield"
+        # self.actor2 = "Jamie Lee Kurtis"
+        # self.actor3 = "Ana De Armas"
+        # self.actor4 = "Chris Evans"
+        # self.actor5 = "Daniel Craig"
 
         actor1Label = self.movieGuess.ids['act1']
         actor1Label.text = self.actor1
 
-        data = read_csv("moviesData.csv")
-        titles = data['filmName'].tolist()
+        r = requests.get("https://qyjs3zubzp4hmzovek2zwq4oju0toehi.lambda-url.eu-west-2.on.aws/")
+        data = json.loads(r.text)
+        # data = read_csv("moviesData.csv")
+        # titles = data['filmName'].tolist()
 
         dropdown = DropDown()
-        for val in titles:
-            btn = Button(text = val, size_hint_y = None, height = 40)
+        for i in range(len(data)):
+            btn = Button(text = data[i]['filmName'], size_hint_y = None, height = 40)
             btn.bind(on_release = lambda btn: dropdown.select(btn.text))
             dropdown.add_widget(btn)
 
