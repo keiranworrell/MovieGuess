@@ -20,6 +20,7 @@ jobs:
         run: |
           pip3 install --user --upgrade buildozer
           pip3 install --user --upgrade cython
+          sudo apt-get install aidl 
 
       - name: Configure Buildozer
         run: | 
