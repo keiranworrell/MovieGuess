@@ -22,9 +22,9 @@ jobs:
       - name: Configure Buildozer
         run: | 
           buildozer init
-          sed -i "s|title = My Application|title = Movie Guesser" buildozer.spec
-          sed -i "s|package.name = myapp|package.name = movieGuess" buildozer.spec
-          sed -i "s|package.domain = org.test|package.domain = movieGuess" buildozer.spec
+          sed -i "s|title = My Application|title = Movie Guesser|" buildozer.spec
+          sed -i "s|package.name = myapp|package.name = movieGuess|" buildozer.spec
+          sed -i "s|package.domain = org.test|package.domain = movieGuess|" buildozer.spec
 
       - name: Build
         run: buildozer -v android debug
