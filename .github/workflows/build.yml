@@ -16,10 +16,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Buildozer and cython
+      - name: Install Tools
         run: |
           pip3 install --user --upgrade buildozer
           pip3 install --user --upgrade cython
+
+          sudo apt-get update
+          sudo apt-get install build-essential
+          sudo apt-get install libstdc++6
           sudo apt-get install aidl 
 
       - name: Configure Buildozer
