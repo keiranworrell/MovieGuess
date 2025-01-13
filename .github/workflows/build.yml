@@ -40,19 +40,15 @@ jobs:
         run: |
           buildozer -v android debug
           zip movieGuess.zip bin/movieGuess-0.1-arm64-v8a_armeabi-v7a-debug.apk
-
-      - name: Set Version
-        run: echo "::set-output name=version::$(./bin/azblogfilter --version)"
-        id: version
-
+          
       - name: Create Release
         uses: actions/create-release@v1
         id: create_release
         with:
           draft: false
           prerelease: false
-          release_name: ${{ steps.version.outputs.version }}
-          tag_name: ${{ github.ref }}
+          release_name: 0.0.${{ github.run_id }}
+          tag_name: 0.0.${{ github.run_id }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
