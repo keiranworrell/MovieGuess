@@ -16,5 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run a one-line script
+      - name: Install Buildozer
         run: pip3 install --user --upgrade buildozer
+
+      - name: Configure Buildozer
+        run: buildozer init
+
+      - name: Build
+        run: buildozer -v android debug

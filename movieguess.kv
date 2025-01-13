@@ -1,0 +1,52 @@
+#:kivy 1.0.9
+
+<MovieGuess>:    
+    cols: 2
+    Label:
+        font_size: 20 
+        text: 'Actor 1:'
+        width: 30
+    Label:
+        id: act1
+        font_size: 20 
+    Label:
+        font_size: 20 
+        text: 'Actor 2:'
+        width: 30
+    Label:
+        id: act2
+        font_size: 20 
+        text: 'Hidden'
+    Label:
+        font_size: 20 
+        text: 'Actor 3:'
+        width: 30
+    Label:
+        id: act3
+        font_size: 20 
+        text: 'Hidden'
+    Label:
+        font_size: 20 
+        text: 'Actor 4:'
+        width: 30
+    Label:
+        id: act4
+        font_size: 20 
+        text: 'Hidden'
+    Label:
+        font_size: 20 
+        text: 'Actor 5:'
+        width: 30
+    Label:
+        id: act5
+        font_size: 20 
+        text: 'Hidden'
+    Button:
+        id: movieDropdown
+        text: 'Pick A Movie'
+        font_size: 20
+        width: 30
+    Button:
+        text: 'Submit Guess'
+        font_size: 20
+        on_press: app.submitGuess()
