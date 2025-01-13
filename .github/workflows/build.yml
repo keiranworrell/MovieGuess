@@ -16,8 +16,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Buildozer
-        run: pip3 install --user --upgrade buildozer
+      - name: Install Buildozer and cython
+        run: |
+          pip3 install --user --upgrade buildozer
+          pip3 install --user --upgrade cython
 
       - name: Configure Buildozer
         run: | 
