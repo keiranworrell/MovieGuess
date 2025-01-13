@@ -41,27 +41,27 @@ jobs:
           buildozer -v android debug
           zip movieGuess.zip bin/movieGuess-0.1-arm64-v8a_armeabi-v7a-debug.apk
 
-    - name: Set Version
-      run: echo "::set-output name=version::$(./bin/azblogfilter --version)"
-      id: version
+      - name: Set Version
+        run: echo "::set-output name=version::$(./bin/azblogfilter --version)"
+        id: version
 
-    - name: Create Release
-      uses: actions/create-release@v1
-      id: create_release
-      with:
-        draft: false
-        prerelease: false
-        release_name: ${{ steps.version.outputs.version }}
-        tag_name: ${{ github.ref }}
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
+      - name: Create Release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          prerelease: false
+          release_name: ${{ steps.version.outputs.version }}
+          tag_name: ${{ github.ref }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
-    - name: Upload Artifact
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./movieGuess.zip
-        asset_name: movieGuess.zip
-        asset_content_type: application/zip
+      - name: Upload Artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./movieGuess.zip
+          asset_name: movieGuess.zip
+          asset_content_type: application/zip
