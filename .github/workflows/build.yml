@@ -20,6 +20,9 @@ jobs:
         run: |
           pip3 install --user --upgrade buildozer
           pip3 install --user --upgrade cython
+          pip3 install --user --upgrade json
+          pip3 install --user --upgrade pandas
+          pip3 install --user --upgrade requests
 
           sudo apt-get update
           sudo apt-get install build-essential
