@@ -28,7 +28,7 @@ jobs:
           sudo apt-get install libstdc++6
           sudo apt-get install aidl 
           sudo apt-get install libltdl-dev
-          sudo apt-get install gettext
+          sudo apt install gettext-devel
 
       # - name: Configure Buildozer
       #   run: | 
