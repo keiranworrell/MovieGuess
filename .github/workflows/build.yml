@@ -24,10 +24,7 @@ jobs:
           pip3 install --user --upgrade requests
 
           sudo apt-get update
-          sudo apt-get install build-essential
-          sudo apt-get install libstdc++6
-          sudo apt-get install aidl 
-          sudo apt-get install libltdl-dev
+          sudo apt-get install build-essential libstdc++6 aidl libltdl-dev
           sudo apt update
           sudo apt install gettext-devel
 
