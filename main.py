@@ -4,7 +4,6 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.popup import Popup
 from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
-from pandas import *
 import requests
 import json
 
