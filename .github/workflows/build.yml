@@ -21,7 +21,6 @@ jobs:
           pip3 install --user --upgrade buildozer
           pip3 install --user --upgrade cython
           pip3 install --user --upgrade requests
-          pip3 install --user --upgrade json
 
           sudo apt-get update
           sudo apt-get install build-essential libstdc++6 aidl libltdl-dev gettext
