@@ -25,15 +25,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install build-essential libstdc++6 aidl libltdl-dev gettext
 
-      # - name: Configure Buildozer
-      #   run: | 
-      #     buildozer init
-      #     sed -i "s|title = My Application|title = MovieGuesser|" buildozer.spec
-      #     sed -i "s|package.name = myapp|package.name = movieGuess|" buildozer.spec
-      #     sed -i "s|package.domain = org.test|package.domain = movieGuess|" buildozer.spec
-      #     sed -i "s|# android.skip_update = False|android.skip_update = False|" buildozer.spec
-      #     sed -i "s|# android.accept_sdk_license = False|android.accept_sdk_license = True|" buildozer.spec
-
       - name: Build
         run: |
           buildozer appclean
