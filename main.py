@@ -1,17 +1,17 @@
-from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.clock import Clock
-from kivy.storage.jsonstore import JsonStore
+from kivy.uix.screenmanager import ScreenManager, Screen # type: ignore
+from kivy.clock import Clock # type: ignore
+from kivy.storage.jsonstore import JsonStore # type: ignore
 from os.path import join
-from kivy.app import App
-from kivy.lang import Builder
-from kivy.uix.label import Label
-from kivy.uix.widget import Widget 
-from kivy.properties import ObjectProperty 
-from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.popup import Popup
-from kivy.uix.button import Button
-from kivy.uix.dropdown import DropDown
-import requests
+from kivy.app import App # type: ignore
+from kivy.lang import Builder # type: ignore
+from kivy.uix.label import Label # type: ignore
+from kivy.uix.widget import Widget  # type: ignore
+from kivy.properties import ObjectProperty  # type: ignore
+from kivy.uix.floatlayout import FloatLayout # type: ignore
+from kivy.uix.popup import Popup # type: ignore
+from kivy.uix.button import Button # type: ignore
+from kivy.uix.dropdown import DropDown # type: ignore
+import requests # type: ignore
 import json
 import hashlib
 
@@ -116,14 +116,7 @@ class loginWindow(Screen):
         else:
             self.username = windowManager.store.get('credentials')['username']
 
-        try:
-            windowManager.store.get('credentials')['password']
-        except KeyError:
-            self.password = ""
-        else:
-            self.password = windowManager.store.get('credentials')['password']
-
-        if self.username != "" and self.password != "":
+        if self.username != "":
             sm.current = "movieguess"
 
 
@@ -134,7 +127,7 @@ class loginWindow(Screen):
             if self.email.text != "":
                 r = requests.get("https://faqxpjcrfrlxcwjfxhvd4borpq0swshy.lambda-url.eu-west-2.on.aws/", json={"email": self.email.text, "password": hashed})
                 if r.text == "Login successful": 
-                    windowManager.store.put('credentials', username=self.email.text, password=hashed)
+                    windowManager.store.put('credentials', username=self.email.text)
                     sm.current = "movieguess"
                 else: 
                     popFun()
