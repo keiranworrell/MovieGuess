@@ -16,7 +16,7 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 
 # (list) List of inclusions using pattern matching
-#source.include_patterns = assets/*,images/*.png
+source.include_patterns = graphics/*
 
 # (list) Source files to exclude (let empty to not exclude anything)
 #source.exclude_exts = spec
@@ -104,7 +104,7 @@ android.permissions = android.permission.INTERNET,WRITE_EXTERNAL_STORAGE
 #android.api = 33
 
 # (int) Minimum API your APK / AAB will support.
-#android.minapi = 21
+#android.minapi = 28
 
 # (int) Android SDK version to use
 #android.sdk = 20
@@ -206,7 +206,7 @@ android.accept_sdk_license = True
 # (bool) Enable AndroidX support. Enable when 'android.gradle_dependencies'
 # contains an 'androidx' package, or any package from Kotlin source.
 # android.enable_androidx requires android.api >= 28
-#android.enable_androidx = True
+android.enable_androidx = True
 
 # (list) add java compile options
 # this can for example be necessary when importing certain java libraries using the 'android.gradle_dependencies' option
