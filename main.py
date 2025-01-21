@@ -1,4 +1,5 @@
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.clock import Clock
 from kivy.storage.jsonstore import JsonStore
 from os.path import join
 from kivy.app import App
@@ -93,6 +94,9 @@ class loginWindow(Screen):
     email = ObjectProperty(None) 
     pwd = ObjectProperty(None)
     def on_enter(self):
+        Clock.schedule_once(self.change_screen)
+
+    def change_screen(self, dt):
         try:
             windowManager.store.get('credentials')['username']
         except KeyError:
@@ -111,6 +115,7 @@ class loginWindow(Screen):
             r = requests.get("https://faqxpjcrfrlxcwjfxhvd4borpq0swshy.lambda-url.eu-west-2.on.aws/", json={"email": self.username, "password": self.password})
             if r.text == "Login successful": 
                 sm.current = "movieguess"
+
 
     def validate(self):
         if self.pwd.text != "":
@@ -157,13 +162,12 @@ class windowManager(ScreenManager):
 kv = Builder.load_file('MovieGuess.kv')
 sm = windowManager()
 
-widgets = [movieGuessWindow(name='movieguess'), loginWindow(name='login'), correctGuessWindow(name='correct')]
+widgets = [loginWindow(name='login'), movieGuessWindow(name='movieguess'), correctGuessWindow(name='correct')]
 for widget in widgets:
     sm.add_widget(widget)
 
 class MovieGuessApp(App): 
     def build(self): 
-        sm.current = "login"
         return sm 
 
 
