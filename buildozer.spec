@@ -47,7 +47,7 @@ requirements = python3,kivy,requests
 #presplash.filename = %(source.dir)s/data/presplash.png
 
 # (str) Icon of the application
-icon.filename = ./graphics/icon.png
+icon.filename = graphics/icon.png
 
 # (list) Supported orientations
 # Valid options are: landscape, portrait, portrait-reverse or landscape-reverse
@@ -87,7 +87,7 @@ android.presplash_color = #FFFFFFFF
 # see https://lottiefiles.com/ for examples and https://airbnb.design/lottie/
 # for general documentation.
 # Lottie files can be created using various tools, like Adobe After Effect or Synfig.
-android.presplash_lottie = "./graphics/loading.lottie"
+android.presplash_lottie = graphics/loading.lottie
 
 # (str) Adaptive icon of the application (used if Android API level is 26+ at runtime)
 #icon.adaptive_foreground.filename = %(source.dir)s/data/icon_fg.png
