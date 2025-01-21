@@ -112,9 +112,7 @@ class loginWindow(Screen):
             self.password = windowManager.store.get('credentials')['password']
 
         if self.username != "" and self.password != "":
-            r = requests.get("https://faqxpjcrfrlxcwjfxhvd4borpq0swshy.lambda-url.eu-west-2.on.aws/", json={"email": self.username, "password": self.password})
-            if r.text == "Login successful": 
-                sm.current = "movieguess"
+            sm.current = "movieguess"
 
 
     def validate(self):
