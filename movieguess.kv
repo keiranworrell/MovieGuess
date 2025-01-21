@@ -114,13 +114,14 @@ windowManager:
             halign: 'center'
             on_press: root.submitGuess()
 
-<correctGuessWindow>:
+<completedWindow>:
     FloatLayout: 
         size: root.width, root.height 
         Label: 
             size_hint: 0.5, 0.4
             pos_hint: {"right" : 0.75, "top" : 0.9}
             text: 'Correct!'
+            id: success
             font_size: 50
         Label:
             size_hint: 0.5, 0.15

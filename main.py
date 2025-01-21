@@ -28,12 +28,20 @@ def popFun():
                    size_hint = (None, None), size = (300, 300)) 
     window.open()
 
-class correctGuessWindow(Screen):
+class completedWindow(Screen):
     def on_enter(self):
         self.ids['correctFilm'].text = self.manager.get_screen('movieguess').ids['movieDropdown'].text
-    
+        guesses_required = self.manager.get_screen('movieguess').guessesSubmitted
+
+        if guesses_required > 3:
+            self.ids['success'].text = "Unlucky!"
+
+        r = requests.post("https://7hhij52kubulqpxun5r2v4gbay0jawhe.lambda-url.eu-west-2.on.aws/", json={"email": windowManager.store.get('credentials')['username'], "guesses": guesses_required})
+        print(r)
+
     def logOut(self):
         windowManager.store.clear()
+        sm.current = "login"
 
 class movieGuessWindow(Screen): 
     def on_enter(self):
@@ -71,7 +79,7 @@ class movieGuessWindow(Screen):
         if True:
             currentGuess = self.ids['movieDropdown'].text
             if currentGuess == self.filmName:
-                sm.current = "correct"
+                sm.current = "complete"
                 return
 
             if self.guessesSubmitted == 0:
@@ -95,9 +103,7 @@ class movieGuessWindow(Screen):
                 self.ids[latestGuess].background_color = 200,100,0,0.6
 
             if self.guessesSubmitted > 3:
-                popup = Popup(title = 'Out of guesses!',
-                              content = Label(text = 'Try again tomorrow.'))
-                popup.open()
+                sm.current = "complete"
 
         else:
             return
@@ -165,7 +171,7 @@ class windowManager(ScreenManager):
 kv = Builder.load_file('MovieGuess.kv')
 sm = windowManager()
 
-widgets = [loginWindow(name='login'), movieGuessWindow(name='movieguess'), correctGuessWindow(name='correct')]
+widgets = [loginWindow(name='login'), movieGuessWindow(name='movieguess'), completedWindow(name='complete')]
 for widget in widgets:
     sm.add_widget(widget)
 
