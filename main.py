@@ -75,18 +75,30 @@ class movieGuessWindow(Screen):
                 return
 
             if self.guessesSubmitted == 0:
+                latestGuess = 'act1'
                 self.ids['act2'].text = self.actor2
             elif self.guessesSubmitted == 1:
+                latestGuess = 'act2'
                 self.ids['act3'].text = self.actor3
             elif self.guessesSubmitted == 2:
+                latestGuess = 'act3'
                 self.ids['act4'].text = self.actor4
             elif self.guessesSubmitted == 3:
+                latestGuess = 'act4'
                 self.ids['act5'].text = self.actor5
+
+            self.guessesSubmitted += 1
+            if currentGuess == "Pick A Movie":
+                self.ids[latestGuess].background_color = 200,0,0,0.6
             else:
+                self.ids[latestGuess].text = self.ids[latestGuess].text + '\n' + currentGuess
+                self.ids[latestGuess].background_color = 200,100,0,0.6
+
+            if self.guessesSubmitted > 3:
                 popup = Popup(title = 'Out of guesses!',
                               content = Label(text = 'Try again tomorrow.'))
                 popup.open()
-            self.guessesSubmitted += 1
+
         else:
             return
         

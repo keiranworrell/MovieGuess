@@ -59,56 +59,59 @@ windowManager:
             size_hint: 0.4, 0.1
             pos_hint: {"right" : 0.45, "top" : 0.95} 
             text: 'Actor 1:'
-        Label:
+        Button:
             size_hint: 0.4, 0.1
             pos_hint: {"right" : 0.95, "top" : 0.95} 
             id: act1
+            halign: 'center'
             text: 'Hidden'
         Label:
             size_hint: 0.4, 0.1
             pos_hint: {"right" : 0.45, "top" : 0.8} 
             text: 'Actor 2:'
-        Label:
+        Button:
             size_hint: 0.4, 0.1
             pos_hint: {"right" : 0.95, "top" : 0.8} 
             id: act2
-            text: 'Hidden'
+            halign: 'center'
         Label:
             size_hint: 0.4, 0.1
             pos_hint: {"right" : 0.45, "top" : 0.65} 
             text: 'Actor 3:'
-        Label:
+        Button:
             size_hint: 0.4, 0.1
             pos_hint: {"right" : 0.95, "top" : 0.65} 
             id: act3
-            text: 'Hidden'
+            halign: 'center'
         Label:
             size_hint: 0.4, 0.1
             pos_hint: {"right" : 0.45, "top" : 0.5} 
             text: 'Actor 4:'
-        Label:
+        Button:
             size_hint: 0.4, 0.1
             pos_hint: {"right" : 0.95, "top" : 0.5} 
             id: act4
-            text: 'Hidden'
+            halign: 'center'
         Label:
             size_hint: 0.4, 0.1
             pos_hint: {"right" : 0.45, "top" : 0.35} 
             text: 'Actor 5:'
-        Label:
+        Button:
             size_hint: 0.4, 0.1
             pos_hint: {"right" : 0.95, "top" : 0.35} 
             id: act5
-            text: 'Hidden'
+            halign: 'center'
         Button:
             size_hint: 0.3, 0.2
             pos_hint: {"right" : 0.4, "top" : 0.25} 
             id: movieDropdown
+            halign: 'center'
             text: 'Pick A Movie'
         Button:
             size_hint: 0.3, 0.2
             pos_hint: {"right" : 0.9, "top" : 0.25} 
             text: 'Submit Guess'
+            halign: 'center'
             on_press: root.submitGuess()
 
 <correctGuessWindow>:
