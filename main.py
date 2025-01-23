@@ -1,7 +1,6 @@
 from kivy.uix.screenmanager import ScreenManager, Screen # type: ignore
 from kivy.clock import Clock # type: ignore
 from kivy.storage.jsonstore import JsonStore # type: ignore
-from os.path import join
 from kivy.app import App # type: ignore
 from kivy.lang import Builder # type: ignore
 from kivy.uix.label import Label # type: ignore
@@ -169,7 +168,7 @@ class loginWindow(Screen):
 
 class windowManager(ScreenManager): 
     data_dir = App().user_data_dir
-    store = JsonStore(join(data_dir, 'storage.json'))
+    store = JsonStore('storage.json')
   
 kv = Builder.load_file('MovieGuess.kv')
 sm = windowManager()
