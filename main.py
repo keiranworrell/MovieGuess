@@ -30,7 +30,7 @@ def popFun():
 
 class completedWindow(Screen):
     def on_enter(self):
-        self.ids['correctFilm'].text = self.manager.get_screen('movieguess').ids['movieDropdown'].text
+        self.ids['correctFilm'].text = self.manager.get_screen('movieguess').filmName
         guesses_required = self.manager.get_screen('movieguess').guessesSubmitted
 
         if guesses_required > 3:
@@ -94,16 +94,19 @@ class movieGuessWindow(Screen):
             elif self.guessesSubmitted == 3:
                 latestGuess = 'act4'
                 self.ids['act5'].text = self.actor5
+            else:
+                latestGuess = 'act5'
+            
+            if self.guessesSubmitted > 3:
+                sm.current = "complete"
 
-            self.guessesSubmitted += 1
             if currentGuess == "Pick A Movie":
                 self.ids[latestGuess].background_color = 200,0,0,0.6
             else:
                 self.ids[latestGuess].text = self.ids[latestGuess].text + '\n' + currentGuess
                 self.ids[latestGuess].background_color = 200,100,0,0.6
-
-            if self.guessesSubmitted > 3:
-                sm.current = "complete"
+            
+            self.guessesSubmitted += 1
 
         else:
             return
