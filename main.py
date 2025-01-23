@@ -35,6 +35,9 @@ class completedWindow(Screen):
 
         if guesses_required > 3:
             self.ids['success'].text = "Unlucky!"
+            self.ids['today'].text = "You didn't get it today."
+        else:
+            self.ids['today'].text = "You got it right in " + str(guesses_required) + "!"
 
         r = requests.post("https://7hhij52kubulqpxun5r2v4gbay0jawhe.lambda-url.eu-west-2.on.aws/", json={"email": windowManager.store.get('credentials')['username'], "guesses": guesses_required})
         print(r)
@@ -192,28 +195,28 @@ windowManager:
             id: email 
             multiline: False
             size_hint: 0.3, 0.1
-            pos_hint: {"right" : 0.45, "top" : 0.9} 
+            pos_hint: {"x" : 0.45, "top" : 0.9} 
         Label: 
             text: "Password: "
             size_hint: 0.2, 0.1
-            pos_hint: {"right" : 0.25, "top" : 0.7} 
+            pos_hint: {"x" : 0.25, "top" : 0.7} 
         TextInput: 
             id: pwd 
             password: True
             multiline: False
             size_hint: 0.3, 0.1
-            pos_hint: {"right" : 0.45, "top" : 0.7} 
+            pos_hint: {"x" : 0.45, "top" : 0.7} 
         Button: 
             text: "Create an account"
             size_hint: 0.4, 0.1
-            pos_hint: {"right" : 0.3, "top" : 0.4} 
+            pos_hint: {"x" : 0.3, "top" : 0.4} 
             on_release:  
                 root.signupbtn()
                 root.manager.transition.direction = "left"
         Button: 
             text: "Login"
             size_hint: 0.3, 0.1
-            pos_hint: {"right" : 0.35, "top" : 0.2} 
+            pos_hint: {"x" : 0.35, "top" : 0.2} 
             on_release:  
                 root.validate() 
                 root.manager.transition.direction = "up"
@@ -292,14 +295,20 @@ windowManager:
     FloatLayout: 
         size: root.width, root.height 
         Label: 
-            size_hint: 0.5, 0.4
-            pos_hint: {"right" : 0.75, "top" : 0.9}
+            size_hint: 0.5, 0.15
+            pos_hint: {"right" : 0.75, "top" : 0.95}
             text: 'Correct!'
             id: success
+            font_size: 50          
+        Label: 
+            size_hint: 0.5, 0.25
+            pos_hint: {"right" : 0.75, "top" : 0.75}
+            text: 'You got it right in x.'
+            id: today
             font_size: 50
         Label:
-            size_hint: 0.5, 0.15
-            pos_hint: {"right" : 0.75, "top" : 0.5}
+            size_hint: 0.5, 0.1
+            pos_hint: {"right" : 0.75, "top" : 0.45}
             text: "Today's film is:"
         Label:
             size_hint: 0.5, 0.15
@@ -308,7 +317,7 @@ windowManager:
             font_size: 50
         Button:
             size_hint: 0.3, 0.1
-            pos_hint: {"right" : 0.9, "top" : 0.2} 
+            pos_hint: {"right" : 0.65, "top" : 0.15} 
             text: 'Log Out'
             on_press: root.logOut()
 
