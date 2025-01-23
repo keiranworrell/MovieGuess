@@ -13,7 +13,7 @@ package.domain = org.movieGuess
 source.dir = .
 
 # (list) Source files to include (let empty to include all the files)
-source.include_exts = 
+source.include_exts = py,png,jpg,kv,atlas
 
 # (list) List of inclusions using pattern matching
 source.include_patterns = graphics/*
