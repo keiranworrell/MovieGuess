@@ -36,11 +36,11 @@ class completedWindow(Screen):
         if guesses_required > 3:
             self.ids['success'].text = "Unlucky!"
 
-        # r = requests.post("https://7hhij52kubulqpxun5r2v4gbay0jawhe.lambda-url.eu-west-2.on.aws/", json={"email": windowManager.store.get('credentials')['username'], "guesses": guesses_required})
+        r = requests.post("https://7hhij52kubulqpxun5r2v4gbay0jawhe.lambda-url.eu-west-2.on.aws/", json={"email": windowManager.store.get('credentials')['username'], "guesses": guesses_required})
         print(r)
 
     def logOut(self):
-        # windowManager.store.clear()
+        windowManager.store.clear()
         sm.current = "login"
 
 class movieGuessWindow(Screen): 
@@ -57,8 +57,7 @@ class movieGuessWindow(Screen):
         self.ids['act1'].text = self.actor1
         
         try:
-            # self.ids['email'].text = windowManager.store.get('credentials')['username']
-            print('Should get email here')
+            self.ids['email'].text = windowManager.store.get('credentials')['username']
         except:
             self.ids['email'].text = "Logged Out"
 
@@ -120,13 +119,11 @@ class loginWindow(Screen):
 
     def change_screen(self, dt):
         try:
-            # windowManager.store.get('credentials')['username']
-            print('Should get from jsonstore here')
+            windowManager.store.get('credentials')['username']
         except KeyError:
             self.username = ""
         else:
-            # self.username = windowManager.store.get('credentials')['username']
-            print('Should get from jsonstore here')
+            self.username = windowManager.store.get('credentials')['username']
 
         if self.username != "":
             sm.current = "movieguess"
@@ -139,7 +136,7 @@ class loginWindow(Screen):
             if self.email.text != "":
                 r = requests.get("https://faqxpjcrfrlxcwjfxhvd4borpq0swshy.lambda-url.eu-west-2.on.aws/", json={"email": self.email.text, "password": hashed})
                 if r.text == "Login successful": 
-                    # windowManager.store.put('credentials', username=self.email.text)
+                    windowManager.store.put('credentials', username=self.email.text)
                     sm.current = "movieguess"
                 else: 
                     popFun()
@@ -159,7 +156,7 @@ class loginWindow(Screen):
                 r = requests.post("https://husifsnku45fiipbsfqyvwzxji0ppleo.lambda-url.eu-west-2.on.aws/", json={"email": self.email.text, "password": hashed})
                 data = json.loads(r.text)
                 if data["ResponseMetadata"]["HTTPStatusCode"] == 200:
-                    # windowManager.store.put('credentials', username=self.email.text, password=hashed)
+                    windowManager.store.put('credentials', username=self.email.text, password=hashed)
                     sm.current = "movieguess"
                 else:
                     popFun()
