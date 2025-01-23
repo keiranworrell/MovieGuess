@@ -16,7 +16,7 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 
 # (list) List of inclusions using pattern matching
-source.include_patterns = graphics/*
+source.include_patterns = graphics/*,./MovieGuess.kv
 
 # (list) Source files to exclude (let empty to not exclude anything)
 #source.exclude_exts = spec
