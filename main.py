@@ -185,35 +185,35 @@ windowManager:
     FloatLayout: 
         size: root.width, root.height 
         Label: 
-            text: "EMAIL: "
+            text: "Email: "
             size_hint: 0.2, 0.1
             pos_hint: {"x":0.25, "top":0.9} 
         TextInput: 
             id: email 
             multiline: False
             size_hint: 0.3, 0.1
-            pos_hint: {"x" : 0.45, "top" : 0.9} 
+            pos_hint: {"right" : 0.45, "top" : 0.9} 
         Label: 
-            text: "PASSWORD: "
+            text: "Password: "
             size_hint: 0.2, 0.1
-            pos_hint: {"x" : 0.25, "top" : 0.7} 
+            pos_hint: {"right" : 0.25, "top" : 0.7} 
         TextInput: 
             id: pwd 
             password: True
             multiline: False
             size_hint: 0.3, 0.1
-            pos_hint: {"x" : 0.45, "top" : 0.7} 
+            pos_hint: {"right" : 0.45, "top" : 0.7} 
         Button: 
             text: "Create an account"
             size_hint: 0.4, 0.1
-            pos_hint: {"x" : 0.33, "top" : 0.4} 
+            pos_hint: {"right" : 0.3, "top" : 0.4} 
             on_release:  
                 root.signupbtn()
                 root.manager.transition.direction = "left"
         Button: 
-            text: "LOGIN"
+            text: "Login"
             size_hint: 0.3, 0.1
-            pos_hint: {"x" : 0.39, "top" : 0.2} 
+            pos_hint: {"right" : 0.35, "top" : 0.2} 
             on_release:  
                 root.validate() 
                 root.manager.transition.direction = "up"
@@ -276,14 +276,14 @@ windowManager:
             id: act5
             halign: 'center'
         Button:
-            size_hint: 0.4, 0.1
+            size_hint: 0.6, 0.1
             pos_hint: {"right" : 0.6, "top" : 0.2} 
             id: movieDropdown
             halign: 'center'
             text: 'Pick A Movie'
         Button:
-            size_hint: 0.2, 0.1
-            pos_hint: {"right" : 0.9, "top" : 0.2} 
+            size_hint: 0.4, 0.1
+            pos_hint: {"right" : 1, "top" : 0.2} 
             text: 'Submit Guess'
             halign: 'center'
             on_press: root.submitGuess()
