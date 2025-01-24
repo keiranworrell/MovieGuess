@@ -36,8 +36,10 @@ class completedWindow(Screen):
         if guessesRequired == "failed":
             self.ids['success'].text = "Unlucky!"
             self.ids['today'].text = "You didn't get it today."
+            self.ids['streak'].text = "Your streak is now 0"
         else:
             self.ids['today'].text = "You got it right in " + str(guessesRequired) + "!"
+            self.ids['streak'].text = "Your current streak is " + str(self.manager.get_screen('loader').oldStreak+1)
 
     def logOut(self):
         windowManager.store.clear()
@@ -167,6 +169,7 @@ class loadingWindow(Screen):
         self.d2Result = resultsData[2]
         self.d3Result = resultsData[3]
         self.d4Result = resultsData[4]
+        self.oldStreak = resultsData[5]
 
         r = requests.get("https://ut7qnywcuo6ffotdpo56lu4fvi0ujuoh.lambda-url.eu-west-2.on.aws/")
         data = json.loads(r.text)
@@ -318,13 +321,19 @@ windowManager:
             font_size: 50          
         Label: 
             size_hint: 0.5, 0.25
-            pos_hint: {"right" : 0.75, "top" : 0.75}
-            text: 'You got it right in x.'
+            pos_hint: {"right" : 0.75, "top" : 0.8}
+            text: 'You got it right in x'
             id: today
             font_size: 50
+        Label: 
+            size_hint: 0.5, 0.25
+            pos_hint: {"right" : 0.75, "top" : 0.6}
+            text: 'Your current streak is y'
+            id: streak
+            font_size: 25
         Label:
             size_hint: 0.5, 0.1
-            pos_hint: {"right" : 0.75, "top" : 0.45}
+            pos_hint: {"right" : 0.75, "top" : 0.4}
             text: "Today's film is:"
         Label:
             size_hint: 0.5, 0.15
