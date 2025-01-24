@@ -139,7 +139,7 @@ class loginWindow(Screen):
                 r = requests.get("https://faqxpjcrfrlxcwjfxhvd4borpq0swshy.lambda-url.eu-west-2.on.aws/", json={"email": self.email.text, "password": hashed})
                 if r.text == "Login successful": 
                     windowManager.store.put('credentials', username=self.email.text)
-                    sm.current = "movieguess"
+                    sm.current = "loader"
                 else: 
                     popFun()
                     self.email.text = "" 
@@ -159,7 +159,7 @@ class loginWindow(Screen):
                 data = json.loads(r.text)
                 if data["ResponseMetadata"]["HTTPStatusCode"] == 200:
                     windowManager.store.put('credentials', username=self.email.text, password=hashed)
-                    sm.current = "movieguess"
+                    sm.current = "loader"
                 else:
                     popFun()
                     self.email.text = ""
