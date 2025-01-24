@@ -11,6 +11,7 @@ from kivy.uix.floatlayout import FloatLayout # type: ignore
 from kivy.uix.popup import Popup # type: ignore
 from kivy.uix.button import Button # type: ignore
 from kivy.uix.dropdown import DropDown # type: ignore
+from kivy.core.clipboard import Clipboard # type: ignore
 import requests # type: ignore
 import json
 import hashlib
@@ -31,19 +32,26 @@ def popFun():
 class completedWindow(Screen):
     def on_enter(self):
         self.ids['correctFilm'].text = self.manager.get_screen('loader').filmName
-        guessesRequired = self.manager.get_screen('movieguess').guessesSubmitted
+        self.guessesRequired = self.manager.get_screen('movieguess').guessesSubmitted
 
-        if guessesRequired == "failed":
+        if self.guessesRequired == "failed":
             self.ids['success'].text = "Unlucky!"
             self.ids['today'].text = "You didn't get it today."
             self.ids['streak'].text = "Your streak is now 0"
         else:
-            self.ids['today'].text = "You got it right in " + str(guessesRequired) + "!"
+            self.ids['today'].text = "You got it right in " + str(self.guessesRequired) + "!"
             self.ids['streak'].text = "Your current streak is " + str(self.manager.get_screen('loader').oldStreak+1)
 
     def logOut(self):
         windowManager.store.clear()
         sm.current = "login"
+    
+    def copyClipboard(self):
+        if self.guessesRequired == "failed":
+            text = "I didn't guess today's movie :("
+        else:
+            text = "I guessed today's movie in " + str(self.guessesRequired) + " so now my streak is " + str(self.manager.get_screen('loader').oldStreak+1) + " days!"
+        Clipboard.copy(text)
 
 class movieGuessWindow(Screen): 
     def on_enter(self):
@@ -342,7 +350,12 @@ windowManager:
             font_size: 50
         Button:
             size_hint: 0.3, 0.1
-            pos_hint: {"right" : 0.65, "top" : 0.15} 
+            pos_hint: {"right" : 0.4, "top" : 0.15} 
+            text: 'Copy results to share'
+            on_press: root.copyClipboard()
+        Button:
+            size_hint: 0.3, 0.1
+            pos_hint: {"right" : 0.9, "top" : 0.15} 
             text: 'Log Out'
             on_press: root.logOut()
                         
