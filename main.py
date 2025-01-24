@@ -40,7 +40,7 @@ class completedWindow(Screen):
             self.ids['streak'].text = "Your streak is now 0"
         else:
             self.ids['today'].text = "You got it right in " + str(self.guessesRequired) + "!"
-            self.ids['streak'].text = "Your current streak is " + str(self.manager.get_screen('loader').oldStreak+1)
+            self.ids['streak'].text = "Your current streak is " + str(self.manager.get_screen('loader').streak)
 
     def logOut(self):
         windowManager.store.clear()
@@ -50,7 +50,7 @@ class completedWindow(Screen):
         if self.guessesRequired == "failed":
             text = "I didn't guess today's movie :("
         else:
-            text = "I guessed today's movie in " + str(self.guessesRequired) + " so now my streak is " + str(self.manager.get_screen('loader').oldStreak+1) + " days!"
+            text = "I guessed today's movie in " + str(self.guessesRequired) + " so now my streak is " + str(self.manager.get_screen('loader').streak) + " days!"
         Clipboard.copy(text)
 
 class movieGuessWindow(Screen): 
@@ -81,6 +81,7 @@ class movieGuessWindow(Screen):
             self.guessesSubmitted += 1
             currentGuess = self.ids['movieDropdown'].text
             if currentGuess == self.manager.get_screen('loader').filmName:
+                self.manager.get_screen('loader').streak = self.manager.get_screen('loader').streak + 1
                 r = requests.post("https://7hhij52kubulqpxun5r2v4gbay0jawhe.lambda-url.eu-west-2.on.aws/", json={"email": windowManager.store.get('credentials')['username'], "guesses": self.guessesSubmitted})
                 sm.current = "complete"
                 return
@@ -102,6 +103,7 @@ class movieGuessWindow(Screen):
             
             if self.guessesSubmitted > 4:
                 self.guessesSubmitted = "failed"
+                self.manager.get_screen('loader').streak = 0
                 r = requests.post("https://7hhij52kubulqpxun5r2v4gbay0jawhe.lambda-url.eu-west-2.on.aws/", json={"email": windowManager.store.get('credentials')['username'], "guesses": self.guessesSubmitted})
                 sm.current = "complete"
 
@@ -173,11 +175,7 @@ class loadingWindow(Screen):
         resultsData = json.loads(s.text)
 
         self.d0Result = resultsData[0]
-        self.d1Result = resultsData[1]
-        self.d2Result = resultsData[2]
-        self.d3Result = resultsData[3]
-        self.d4Result = resultsData[4]
-        self.oldStreak = resultsData[5]
+        self.streak = resultsData[1]
 
         r = requests.get("https://ut7qnywcuo6ffotdpo56lu4fvi0ujuoh.lambda-url.eu-west-2.on.aws/")
         data = json.loads(r.text)
