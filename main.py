@@ -30,18 +30,14 @@ def popFun():
 
 class completedWindow(Screen):
     def on_enter(self):
-        self.ids['correctFilm'].text = self.manager.get_screen('movieguess').filmName
-        vic = self.manager.get_screen('movieguess').victory
-        guesses_required = self.manager.get_screen('movieguess').guessesSubmitted
+        self.ids['correctFilm'].text = self.manager.get_screen('loader').filmName
+        guessesRequired = self.manager.get_screen('movieguess').guessesSubmitted
 
-        if vic:
-            self.ids['today'].text = "You got it right in " + str(guesses_required) + "!"
-        else:
+        if guessesRequired == "failed":
             self.ids['success'].text = "Unlucky!"
             self.ids['today'].text = "You didn't get it today."
-
-        r = requests.post("https://7hhij52kubulqpxun5r2v4gbay0jawhe.lambda-url.eu-west-2.on.aws/", json={"email": windowManager.store.get('credentials')['username'], "guesses": guesses_required})
-        print(r)
+        else:
+            self.ids['today'].text = "You got it right in " + str(guessesRequired) + "!"
 
     def logOut(self):
         windowManager.store.clear()
@@ -49,24 +45,15 @@ class completedWindow(Screen):
 
 class movieGuessWindow(Screen): 
     def on_enter(self):
-        r = requests.get("https://ut7qnywcuo6ffotdpo56lu4fvi0ujuoh.lambda-url.eu-west-2.on.aws/")
-        data = json.loads(r.text)
-        self.filmName = data['Item']['filmName']['S']
-        self.actor1 = data['Item']['actor1']['S']
-        self.actor2 = data['Item']['actor2']['S']
-        self.actor3 = data['Item']['actor3']['S']
-        self.actor4 = data['Item']['actor4']['S']
-        self.actor5 = data['Item']['actor5']['S']
-
-        self.ids['act1'].text = self.actor1
+        self.ids['act1'].text = self.manager.get_screen('loader').actor1
         
         try:
             self.ids['email'].text = windowManager.store.get('credentials')['username']
         except:
             self.ids['email'].text = "Logged Out"
 
-        r = requests.get("https://qyjs3zubzp4hmzovek2zwq4oju0toehi.lambda-url.eu-west-2.on.aws/")
-        data = json.loads(r.text)
+
+        data = self.manager.get_screen('loader').filmList
         dropdown = DropDown()
         for i in range(len(data)):
             btn = Button(text = data[i]['filmName'], size_hint_y = None, height = 40)
@@ -83,28 +70,29 @@ class movieGuessWindow(Screen):
         if True:
             self.guessesSubmitted += 1
             currentGuess = self.ids['movieDropdown'].text
-            if currentGuess == self.filmName:
-                self.victory = True
+            if currentGuess == self.manager.get_screen('loader').filmName:
+                r = requests.post("https://7hhij52kubulqpxun5r2v4gbay0jawhe.lambda-url.eu-west-2.on.aws/", json={"email": windowManager.store.get('credentials')['username'], "guesses": self.guessesSubmitted})
                 sm.current = "complete"
                 return
 
             if self.guessesSubmitted == 1:
                 latestGuess = 'act1'
-                self.ids['act2'].text = self.actor2
+                self.ids['act2'].text = self.manager.get_screen('loader').actor2
             elif self.guessesSubmitted == 2:
                 latestGuess = 'act2'
-                self.ids['act3'].text = self.actor3
+                self.ids['act3'].text = self.manager.get_screen('loader').actor3
             elif self.guessesSubmitted == 3:
                 latestGuess = 'act3'
-                self.ids['act4'].text = self.actor4
+                self.ids['act4'].text = self.manager.get_screen('loader').actor4
             elif self.guessesSubmitted == 4:
                 latestGuess = 'act4'
-                self.ids['act5'].text = self.actor5
+                self.ids['act5'].text = self.manager.get_screen('loader').actor5
             else:
                 latestGuess = 'act5'
             
             if self.guessesSubmitted > 4:
-                self.victory = False
+                self.guessesSubmitted = "failed"
+                r = requests.post("https://7hhij52kubulqpxun5r2v4gbay0jawhe.lambda-url.eu-west-2.on.aws/", json={"email": windowManager.store.get('credentials')['username'], "guesses": self.guessesSubmitted})
                 sm.current = "complete"
 
             if currentGuess == "Pick A Movie":
@@ -112,10 +100,6 @@ class movieGuessWindow(Screen):
             else:
                 self.ids[latestGuess].text = self.ids[latestGuess].text + '\nYou guessed: ' + currentGuess
                 self.ids[latestGuess].background_color = 200,100,0,0.6
-            
-
-        else:
-            return
         
 class loginWindow(Screen):
     email = ObjectProperty(None) 
@@ -132,7 +116,7 @@ class loginWindow(Screen):
             self.username = windowManager.store.get('credentials')['username']
 
         if self.username != "":
-            sm.current = "movieguess"
+            sm.current = "loader"
 
 
     def validate(self):
@@ -173,6 +157,34 @@ class loginWindow(Screen):
         else:
             popFun()
 
+class loadingWindow(Screen):
+    def on_enter(self):
+        s = requests.get("https://ldj6biyny5htkmafqcrvnt3am40sottu.lambda-url.eu-west-2.on.aws/", json={"email": windowManager.store.get('credentials')['username']})
+        resultsData = json.loads(s.text)
+
+        self.d0Result = resultsData[0]
+        self.d1Result = resultsData[1]
+        self.d2Result = resultsData[2]
+        self.d3Result = resultsData[3]
+        self.d4Result = resultsData[4]
+
+        r = requests.get("https://ut7qnywcuo6ffotdpo56lu4fvi0ujuoh.lambda-url.eu-west-2.on.aws/")
+        data = json.loads(r.text)
+        self.actor1 = data[0]['actor1']
+        self.actor2 = data[0]['actor2']
+        self.actor3 = data[0]['actor3']
+        self.actor4 = data[0]['actor4']
+        self.actor5 = data[0]['actor5']
+        self.filmName = data[0]['filmName']
+
+        self.filmList = data[1]
+        
+        if self.d0Result == "":
+            sm.current = "movieguess"
+        else:
+            self.manager.get_screen('movieguess').guessesSubmitted = self.d0Result
+            sm.current = "complete"
+
 class windowManager(ScreenManager): 
     data_dir = App().user_data_dir
     store = JsonStore(join(data_dir, 'storage.json'))
@@ -184,6 +196,7 @@ windowManager:
     loginWindow: 
     movieGuessWindow: 
     correctGuessWindow:
+    loadingWindow:
 
 <loginWindow>: 
     email: email 
@@ -323,7 +336,16 @@ windowManager:
             pos_hint: {"right" : 0.65, "top" : 0.15} 
             text: 'Log Out'
             on_press: root.logOut()
-
+                        
+<loadingWindow>:
+    FloatLayout:
+        size: root.width, root.height 
+        Label: 
+            size_hint: 0.5, 0.15
+            pos_hint: {"right" : 0.75, "top" : 0.7}
+            text: 'Loading...'
+            id: success
+            font_size: 50    
 
 <P>: 
     Label: 
@@ -333,7 +355,7 @@ windowManager:
                          ''')
 sm = windowManager()
 
-widgets = [loginWindow(name='login'), movieGuessWindow(name='movieguess'), completedWindow(name='complete')]
+widgets = [loginWindow(name='login'), movieGuessWindow(name='movieguess'), completedWindow(name='complete'), loadingWindow(name='loader')]
 for widget in widgets:
     sm.add_widget(widget)
 
