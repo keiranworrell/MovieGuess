@@ -31,13 +31,14 @@ def popFun():
 class completedWindow(Screen):
     def on_enter(self):
         self.ids['correctFilm'].text = self.manager.get_screen('movieguess').filmName
+        vic = self.manager.get_screen('movieguess').victory
         guesses_required = self.manager.get_screen('movieguess').guessesSubmitted
 
-        if guesses_required > 3:
+        if vic:
+            self.ids['today'].text = "You got it right in " + str(guesses_required) + "!"
+        else:
             self.ids['success'].text = "Unlucky!"
             self.ids['today'].text = "You didn't get it today."
-        else:
-            self.ids['today'].text = "You got it right in " + str(guesses_required) + "!"
 
         r = requests.post("https://7hhij52kubulqpxun5r2v4gbay0jawhe.lambda-url.eu-west-2.on.aws/", json={"email": windowManager.store.get('credentials')['username'], "guesses": guesses_required})
         print(r)
@@ -80,36 +81,38 @@ class movieGuessWindow(Screen):
 
     def submitGuess(self, *args):
         if True:
+            self.guessesSubmitted += 1
             currentGuess = self.ids['movieDropdown'].text
             if currentGuess == self.filmName:
+                self.victory = True
                 sm.current = "complete"
                 return
 
-            if self.guessesSubmitted == 0:
+            if self.guessesSubmitted == 1:
                 latestGuess = 'act1'
                 self.ids['act2'].text = self.actor2
-            elif self.guessesSubmitted == 1:
+            elif self.guessesSubmitted == 2:
                 latestGuess = 'act2'
                 self.ids['act3'].text = self.actor3
-            elif self.guessesSubmitted == 2:
+            elif self.guessesSubmitted == 3:
                 latestGuess = 'act3'
                 self.ids['act4'].text = self.actor4
-            elif self.guessesSubmitted == 3:
+            elif self.guessesSubmitted == 4:
                 latestGuess = 'act4'
                 self.ids['act5'].text = self.actor5
             else:
                 latestGuess = 'act5'
             
-            if self.guessesSubmitted > 3:
+            if self.guessesSubmitted > 4:
+                self.victory = False
                 sm.current = "complete"
 
             if currentGuess == "Pick A Movie":
                 self.ids[latestGuess].background_color = 200,0,0,0.6
             else:
-                self.ids[latestGuess].text = self.ids[latestGuess].text + '\n' + currentGuess
+                self.ids[latestGuess].text = self.ids[latestGuess].text + '\nYou guessed: ' + currentGuess
                 self.ids[latestGuess].background_color = 200,100,0,0.6
             
-            self.guessesSubmitted += 1
 
         else:
             return
