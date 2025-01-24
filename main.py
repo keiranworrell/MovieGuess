@@ -1,17 +1,17 @@
 from kivy.uix.screenmanager import ScreenManager, Screen # type: ignore
+from kivy.uix.textinput import TextInput # type: ignore
 from kivy.clock import Clock # type: ignore
 from kivy.storage.jsonstore import JsonStore # type: ignore
+from kivy.core.window import Window # type: ignore
 from os.path import join
-from kivy.app import App # type: ignore
+from kivymd.app import MDApp # type: ignore
 from kivy.lang import Builder # type: ignore
-from kivy.uix.label import Label # type: ignore
 from kivy.uix.widget import Widget  # type: ignore
 from kivy.properties import ObjectProperty  # type: ignore
 from kivy.uix.floatlayout import FloatLayout # type: ignore
 from kivy.uix.popup import Popup # type: ignore
-from kivy.uix.button import Button # type: ignore
-from kivy.uix.dropdown import DropDown # type: ignore
 from kivy.core.clipboard import Clipboard # type: ignore
+from fast_autocomplete import AutoComplete # type: ignore
 import requests # type: ignore
 import json
 import hashlib
@@ -22,6 +22,14 @@ class PopupWindow(Widget):
 
 class P(FloatLayout): 
     pass
+
+class MyTextInput(TextInput):
+    def keyboard_on_key_down(self, window, keycode, text, modifiers):
+        # Add support for tab as an 'autocomplete' using the suggestion text.
+        if self.suggestion_text and keycode[1] == 'tab':
+            self.insert_text(self.suggestion_text + ' ')
+            return True
+        return super(MyTextInput, self).keyboard_on_key_down(window, keycode, text, modifiers)
 
 def popFun(): 
     show = P() 
@@ -56,31 +64,33 @@ class completedWindow(Screen):
 class movieGuessWindow(Screen): 
     def on_enter(self):
         self.ids['act1'].text = self.manager.get_screen('loader').actor1
+        self.ids['guessInput'].hint_text = ""
         
         try:
             self.ids['email'].text = windowManager.store.get('credentials')['username']
         except:
             self.ids['email'].text = "Logged Out"
 
-
-        data = self.manager.get_screen('loader').filmList
-        dropdown = DropDown()
-        for i in range(len(data)):
-            btn = Button(text = data[i]['filmName'], size_hint_y = None, height = 40)
-            btn.bind(on_release = lambda btn: dropdown.select(btn.text))
-            dropdown.add_widget(btn)
-
-        dropButton = self.ids['movieDropdown']
-        dropButton.bind(on_release = dropdown.open)
-        dropdown.bind(on_select = lambda instance, x: setattr(dropButton, 'text', x))
-
+        self.word_list = ('The quick brown fox jumps over the lazy old dog').split(' ')
+        self.suggest_list = {}
+        for item in self.manager.get_screen('loader').filmList:
+            self.suggest_list.update({item['filmName']: {}})
+        self.autocomplete = AutoComplete(words=self.suggest_list)
+        self.ids['guessInput'].bind(text=self.on_text)
         self.guessesSubmitted = 0
+    
+    def on_text(self, instance, value):
+        word = self.autocomplete.search(word=value, max_cost=3, size=3)
+        if not word:
+            self.ids['guessInput'].hint_text = ""
+            return
+        self.ids['guessInput'].hint_text = word[0][0]
 
     def submitGuess(self, *args):
         if True:
             self.guessesSubmitted += 1
-            currentGuess = self.ids['movieDropdown'].text
-            if currentGuess == self.manager.get_screen('loader').filmName:
+            currentGuess = self.ids['guessInput'].hint_text
+            if currentGuess.upper() == self.manager.get_screen('loader').filmName.upper():
                 self.manager.get_screen('loader').streak = self.manager.get_screen('loader').streak + 1
                 r = requests.post("https://7hhij52kubulqpxun5r2v4gbay0jawhe.lambda-url.eu-west-2.on.aws/", json={"email": windowManager.store.get('credentials')['username'], "guesses": self.guessesSubmitted})
                 sm.current = "complete"
@@ -195,7 +205,7 @@ class loadingWindow(Screen):
             sm.current = "complete"
 
 class windowManager(ScreenManager): 
-    data_dir = App().user_data_dir
+    data_dir = MDApp().user_data_dir
     store = JsonStore(join(data_dir, 'storage.json'))
   
 kv = Builder.load_string('''
@@ -210,7 +220,13 @@ windowManager:
 <loginWindow>: 
     email: email 
     pwd: pwd 
-    FloatLayout: 
+    MDFloatLayout:
+        canvas:
+            Color:
+                rgba: 0,0,0,.8
+            Rectangle:
+                size: self.size
+                pos: self.pos
         size: root.width, root.height 
         Label: 
             text: "Email: "
@@ -247,7 +263,13 @@ windowManager:
                 root.manager.transition.direction = "up"
   
 <movieGuessWindow>: 
-    FloatLayout: 
+    MDFloatLayout: 
+        canvas:
+            Color:
+                rgba: 0,0,0,.8
+            Rectangle:
+                size: self.size
+                pos: self.pos
         size: root.width, root.height  
         Label:
             size_hint: 0.4, 0.05
@@ -303,12 +325,11 @@ windowManager:
             pos_hint: {"right" : 0.95, "top" : 0.35} 
             id: act5
             halign: 'center'
-        Button:
-            size_hint: 0.6, 0.1
-            pos_hint: {"right" : 0.6, "top" : 0.2} 
-            id: movieDropdown
-            halign: 'center'
-            text: 'Pick A Movie'
+        MDTextField:
+            size_hint: 0.575, 0.1
+            pos_hint: {"right" : 0.58825, "top" : 0.2} 
+            line_color_normal: 1,1,1,1
+            id: guessInput
         Button:
             size_hint: 0.4, 0.1
             pos_hint: {"right" : 1, "top" : 0.2} 
@@ -317,7 +338,13 @@ windowManager:
             on_press: root.submitGuess()
 
 <completedWindow>:
-    FloatLayout: 
+    MDFloatLayout:
+        canvas:
+            Color:
+                rgba: 0,0,0,.8
+            Rectangle:
+                size: self.size
+                pos: self.pos
         size: root.width, root.height 
         Label: 
             size_hint: 0.5, 0.15
@@ -358,7 +385,13 @@ windowManager:
             on_press: root.logOut()
                         
 <loadingWindow>:
-    FloatLayout:
+    MDFloatLayout:
+        canvas:
+            Color:
+                rgba: 0,0,0,.8
+            Rectangle:
+                size: self.size
+                pos: self.pos
         size: root.width, root.height 
         Label: 
             size_hint: 0.5, 0.15
@@ -374,13 +407,14 @@ windowManager:
         pos_hint : {"x" : 0.3, "top" : 0.8} 
                          ''')
 sm = windowManager()
-
 widgets = [loginWindow(name='login'), movieGuessWindow(name='movieguess'), completedWindow(name='complete'), loadingWindow(name='loader')]
 for widget in widgets:
     sm.add_widget(widget)
 
-class MovieGuessApp(App): 
+class MovieGuessApp(MDApp): 
     def build(self): 
+        # adding theme_color 
+        self.theme_cls.theme_style="Dark"   
         return sm 
 
 
