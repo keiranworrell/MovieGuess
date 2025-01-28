@@ -117,7 +117,7 @@ class movieGuessWindow(Screen):
                 r = requests.post("https://7hhij52kubulqpxun5r2v4gbay0jawhe.lambda-url.eu-west-2.on.aws/", json={"email": windowManager.store.get('credentials')['username'], "guesses": self.guessesSubmitted})
                 sm.current = "complete"
 
-            if currentGuess == "Pick A Movie":
+            if currentGuess == "":
                 self.ids[latestGuess].background_color = 200,0,0,0.6
             else:
                 self.ids[latestGuess].text = self.ids[latestGuess].text + '\nYou guessed: ' + currentGuess
@@ -270,72 +270,72 @@ windowManager:
             Rectangle:
                 size: self.size
                 pos: self.pos
-        size: root.width, root.height  
-        Label:
-            size_hint: 0.4, 0.05
-            pos_hint: {"right" : 0.45, "top" : 0.05} 
-            text: "Logged in as:"
-        Label:
-            size_hint: 0.4, 0.05
-            pos_hint: {"right" : 0.95, "top" : 0.05} 
-            id: email
+        size: root.width, root.height 
+        MDTextField:
+            size_hint: 0.575, 0.1
+            pos_hint: {"right" : 0.58825, "top" : 0.95} 
+            line_color_normal: 1,1,1,1
+            id: guessInput
+        Button:
+            size_hint: 0.4, 0.1
+            pos_hint: {"right" : 1, "top" : 0.95} 
+            text: 'Submit Guess'
+            halign: 'center'
+            on_press: root.submitGuess() 
         Label:
             size_hint: 0.4, 0.1
-            pos_hint: {"right" : 0.45, "top" : 0.95} 
+            pos_hint: {"right" : 0.45, "top" : 0.8} 
             text: 'Actor 1:'
         Button:
             size_hint: 0.4, 0.1
-            pos_hint: {"right" : 0.95, "top" : 0.95} 
+            pos_hint: {"right" : 0.95, "top" : 0.8} 
             id: act1
             halign: 'center'
             text: 'Hidden'
         Label:
             size_hint: 0.4, 0.1
-            pos_hint: {"right" : 0.45, "top" : 0.8} 
+            pos_hint: {"right" : 0.45, "top" : 0.65} 
             text: 'Actor 2:'
         Button:
             size_hint: 0.4, 0.1
-            pos_hint: {"right" : 0.95, "top" : 0.8} 
+            pos_hint: {"right" : 0.95, "top" : 0.65} 
             id: act2
             halign: 'center'
         Label:
             size_hint: 0.4, 0.1
-            pos_hint: {"right" : 0.45, "top" : 0.65} 
+            pos_hint: {"right" : 0.45, "top" : 0.5} 
             text: 'Actor 3:'
         Button:
             size_hint: 0.4, 0.1
-            pos_hint: {"right" : 0.95, "top" : 0.65} 
+            pos_hint: {"right" : 0.95, "top" : 0.5} 
             id: act3
             halign: 'center'
         Label:
             size_hint: 0.4, 0.1
-            pos_hint: {"right" : 0.45, "top" : 0.5} 
+            pos_hint: {"right" : 0.45, "top" : 0.35} 
             text: 'Actor 4:'
         Button:
             size_hint: 0.4, 0.1
-            pos_hint: {"right" : 0.95, "top" : 0.5} 
+            pos_hint: {"right" : 0.95, "top" : 0.35} 
             id: act4
             halign: 'center'
         Label:
             size_hint: 0.4, 0.1
-            pos_hint: {"right" : 0.45, "top" : 0.35} 
+            pos_hint: {"right" : 0.45, "top" : 0.2} 
             text: 'Actor 5:'
         Button:
             size_hint: 0.4, 0.1
-            pos_hint: {"right" : 0.95, "top" : 0.35} 
+            pos_hint: {"right" : 0.95, "top" : 0.2} 
             id: act5
             halign: 'center'
-        MDTextField:
-            size_hint: 0.575, 0.1
-            pos_hint: {"right" : 0.58825, "top" : 0.2} 
-            line_color_normal: 1,1,1,1
-            id: guessInput
-        Button:
-            size_hint: 0.4, 0.1
-            pos_hint: {"right" : 1, "top" : 0.2} 
-            text: 'Submit Guess'
-            halign: 'center'
-            on_press: root.submitGuess()
+        Label:
+            size_hint: 0.4, 0.05
+            pos_hint: {"right" : 0.45, "top" : 0.075} 
+            text: "Logged in as:"
+        Label:
+            size_hint: 0.4, 0.05
+            pos_hint: {"right" : 0.95, "top" : 0.075} 
+            id: email
 
 <completedWindow>:
     MDFloatLayout:
@@ -374,13 +374,13 @@ windowManager:
             id: correctFilm
             font_size: 50
         Button:
-            size_hint: 0.3, 0.1
-            pos_hint: {"right" : 0.4, "top" : 0.15} 
-            text: 'Copy results to share'
+            size_hint: 0.4, 0.1
+            pos_hint: {"right" : 0.7, "top" : 0.2} 
+            text: "Copy results to clipboard"
             on_press: root.copyClipboard()
         Button:
             size_hint: 0.3, 0.1
-            pos_hint: {"right" : 0.9, "top" : 0.15} 
+            pos_hint: {"right" : 0.6, "top" : 0.1} 
             text: 'Log Out'
             on_press: root.logOut()
                         
@@ -393,9 +393,12 @@ windowManager:
                 size: self.size
                 pos: self.pos
         size: root.width, root.height 
+        Image:
+            source: 'graphics/Clapperboard.zip'
+            anim_delay: 1
         Label: 
             size_hint: 0.5, 0.15
-            pos_hint: {"right" : 0.75, "top" : 0.7}
+            pos_hint: {"right" : 0.75, "top" : 0.3}
             text: 'Loading...'
             id: success
             font_size: 50    
