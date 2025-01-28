@@ -395,7 +395,7 @@ windowManager:
         size: root.width, root.height 
         Image:
             source: 'graphics/Clapperboard.zip'
-            anim_delay: 1
+            anim_delay: .0667
         Label: 
             size_hint: 0.5, 0.15
             pos_hint: {"right" : 0.75, "top" : 0.3}
