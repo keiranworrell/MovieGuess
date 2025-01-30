@@ -374,13 +374,13 @@ windowManager:
             id: correctFilm
             font_size: 50
         Button:
-            size_hint: 0.4, 0.1
-            pos_hint: {"right" : 0.7, "top" : 0.2} 
+            size_hint: 0.5, 0.1
+            pos_hint: {"right" : 0.75, "top" : 0.2} 
             text: "Copy results to clipboard"
             on_press: root.copyClipboard()
         Button:
             size_hint: 0.3, 0.1
-            pos_hint: {"right" : 0.6, "top" : 0.1} 
+            pos_hint: {"right" : 0.65, "top" : 0.1} 
             text: 'Log Out'
             on_press: root.logOut()
                         
