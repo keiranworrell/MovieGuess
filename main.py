@@ -15,6 +15,10 @@ from fast_autocomplete import AutoComplete # type: ignore
 import requests # type: ignore
 import json
 import hashlib
+import threading
+
+def request_task(url, data):
+    requests.post(url, json=data)
 
 class PopupWindow(Widget): 
     def btn(self): 
@@ -92,7 +96,9 @@ class movieGuessWindow(Screen):
             currentGuess = self.ids['guessInput'].hint_text
             if currentGuess.upper() == self.manager.get_screen('loader').filmName.upper():
                 self.manager.get_screen('loader').streak = self.manager.get_screen('loader').streak + 1
-                r = requests.post("https://7hhij52kubulqpxun5r2v4gbay0jawhe.lambda-url.eu-west-2.on.aws/", json={"email": windowManager.store.get('credentials')['username'], "guesses": self.guessesSubmitted})
+                url = "https://7hhij52kubulqpxun5r2v4gbay0jawhe.lambda-url.eu-west-2.on.aws/"
+                json = {"email": windowManager.store.get('credentials')['username'], "guesses": self.guessesSubmitted}
+                threading.Thread(target=request_task, args=(url, json)).start()
                 sm.current = "complete"
                 return
 
